@@ -19,6 +19,7 @@ npm create vite@latest
 npm i react-router-dom
 ```
 ## Tailwind CSS
+- [Tailwind Documention](https://tailwindcss.com/docs/guides/vite)
 
 ```
 npm install -D tailwindcss postcss autoprefixer
