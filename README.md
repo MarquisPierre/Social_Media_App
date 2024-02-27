@@ -27,3 +27,16 @@ npm install -D tailwindcss postcss autoprefixer
 ```
 npx tailwindcss init -p
 ```
+```
+npm i tailwind ani
+```
+
+
+## Shadcn/ui
+- A library of perdectly designed components using Tailwind
+- [Shadcn/ui Documentation](https://ui.shadcn.com/docs/installation/vite)
+```
+npm install -D tailwindcss postcss autoprefixer
+
+npx tailwindcss init -p
+```
