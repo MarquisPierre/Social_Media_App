@@ -39,4 +39,7 @@ npm i tailwind ani
 npm install -D tailwindcss postcss autoprefixer
 
 npx tailwindcss init -p
+
+npx shadcn-ui@latest add form
+
 ```
