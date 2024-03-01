@@ -36,10 +36,6 @@ npm i tailwind ani
 - A library of perdectly designed components using Tailwind
 - [Shadcn/ui Documentation](https://ui.shadcn.com/docs/installation/vite)
 ```
-npm install -D tailwindcss postcss autoprefixer
-
-npx tailwindcss init -p
-
-npx shadcn-ui@latest add form
+npx shadcn-ui@latest init
 
 ```
