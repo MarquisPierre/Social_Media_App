@@ -33,7 +33,7 @@ npm i tailwind ani
 
 
 ## Shadcn/ui
-- A library of perdectly designed components using Tailwind
+- A library of perfectly designed components using Tailwind
 - [Shadcn/ui Documentation](https://ui.shadcn.com/docs/installation/vite)
 ```
 npx shadcn-ui@latest init
