@@ -10,6 +10,7 @@ export default function AuthLayout() {
       ) : (
         <>
           <section className="flex flex-1 justify-center items-center flex-col py-10">
+            {/*This returns either the Sign in form or the Sign up form */}
             <Outlet />
           </section>
 

@@ -1,5 +1,6 @@
 import { z } from "zod"
 // A schema for proper sign up validation 
+//These will check if the inputed string satisfies the character count
 export const SignupValidation = z.object({
     name: z.string().min(2, {message: 'Name must be at least 2 characters'}),
     username: z.string().min(2, {message: 'Username must be at least 2 characters'}),

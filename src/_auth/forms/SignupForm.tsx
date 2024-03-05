@@ -8,12 +8,13 @@ import { Button } from "@/components/ui/button"
 import { SignupValidation } from "@/lib/validation"
 import { z } from "zod"
 import Loader from "@/components/ui/shared/Loader"
+import { createUserAccount } from "@/lib/appwrite/api"
 
 const SignupForm = () => {
  
     const isLoading = false
-
-     // 1. Define your form.
+  // The source of the Form Schema which is named SignupValidation -> lib/validation 
+  // 1. Define your form.
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
@@ -25,9 +26,10 @@ const SignupForm = () => {
   })
  
   // 2. Define a submit handler.
-  function onSubmit(values: z.infer<typeof SignupValidation>) {
+  async function onSubmit(values: z.infer<typeof SignupValidation>) {
     // Do something with the form values.
-    // const newUser = await createUserAccount(values)
+    const newUser = await createUserAccount(values)
+    console.log(newUser)
   }
 
 
@@ -104,7 +106,7 @@ const SignupForm = () => {
           )}
         />
 
-
+        {/*Submit Button */}
         <Button type="submit" className="shad-button_primary" >
            {isLoading ? (
             <div className="flex-center gap-2">
