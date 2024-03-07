@@ -43,4 +43,8 @@ npx shadcn-ui@latest init
 - An open source platform lets you add Auth, DBs, Functions and Storage to your product and build any application at any scale, own your data, and use your preferred coding languages and tools.
 - [AppWrite Documention](https://appwrite.io/docs)
 
+```
+npm install appwrite
+```
+
 
