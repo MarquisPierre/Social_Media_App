@@ -8,10 +8,15 @@ import { Button } from "@/components/ui/button"
 import { SignupValidation } from "@/lib/validation"
 import { z } from "zod"
 import Loader from "@/components/ui/shared/Loader"
-import { createUserAccount } from "@/lib/appwrite/api"
+import { createAccount } from "@/lib/appwrite/api"
+import { useToast } from "@/components/ui/use-toast"
+
+// import { createUserAccount } from "@/lib/appwrite/api"
+
 
 const SignupForm = () => {
- 
+     
+    const { toast } = useToast()
     const isLoading = false
   // The source of the Form Schema which is named SignupValidation -> lib/validation 
   // 1. Define your form.
@@ -28,8 +33,12 @@ const SignupForm = () => {
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     // Do something with the form values.
-    const newUser = await createUserAccount(values)
-    console.log(newUser)
+    const newUser = await createAccount(values)
+    if(!newUser){
+      return toast({ title: "Sign up failed", })
+    }
+    
+    // const session = await signInAccount()
   }
 
 
