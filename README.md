@@ -1,5 +1,5 @@
 # InstaBlam
-A social media application that is essentially a clone of instagram
+A social media application that is essentially a clone of instagram that allows you to doom scroll
 ## External Packages 
 
 These are all the external packages that were used for this project
