@@ -1,5 +1,5 @@
 # InstaBlam
-A social media application that is essentially a clone of instagram
+A social media application that is essentially a clone of instagram that allows you to doom scroll
 ## External Packages 
 
 These are all the external packages that were used for this project
@@ -38,3 +38,13 @@ npm i tailwind ani
 ```
 npx shadcn-ui@latest init
 ```
+
+## AppWrite
+- An open source platform lets you add Auth, DBs, Functions and Storage to your product and build any application at any scale, own your data, and use your preferred coding languages and tools.
+- [AppWrite Documention](https://appwrite.io/docs)
+
+```
+npm install appwrite
+```
+
+
