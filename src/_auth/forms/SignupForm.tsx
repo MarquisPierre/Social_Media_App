@@ -1,46 +1,93 @@
-
+import { z } from "zod"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Link } from "react-router-dom"
+import { Link , useNavigate } from "react-router-dom"
 import { useForm } from "react-hook-form"
+
+
 import {Form, FormControl, FormDescription, FormField, FormItem,  FormLabel,  FormMessage,} from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
-import { SignupValidation } from "@/lib/validation"
-import { z } from "zod"
 import Loader from "@/components/ui/shared/Loader"
-import { createAccount } from "@/lib/appwrite/api"
 import { useToast } from "@/components/ui/use-toast"
 
-// import { createUserAccount } from "@/lib/appwrite/api"
+import { useCreateUserAccount, useSignInAccount } from "@/lib/react-query/queriesAndMutations"
+import { SignupValidation } from "@/lib/validation"
+import { useUserContext } from "@/context/AuthContext";
 
 
-const SignupForm = () => {
+
+const SignupForm = async () => {
      
-    const { toast } = useToast()
-    const isLoading = false
-  // The source of the Form Schema which is named SignupValidation -> lib/validation 
-  // 1. Define your form.
-  const form = useForm<z.infer<typeof SignupValidation>>({
-    resolver: zodResolver(SignupValidation),
-    defaultValues: {
-      name: '',
-      username: "",
-      email: '',
-      password: ''
-    },
-  })
- 
+  const { toast } = useToast()
+  const navigate = useNavigate();
+  const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
+
+
+
+// The source of the Form Schema which is named SignupValidation -> lib/validation 
+// 1. Define your form.
+const form = useForm<z.infer<typeof SignupValidation>>({
+  resolver: zodResolver(SignupValidation),
+  defaultValues: {
+    name: '',
+    username: "",
+    email: '',
+    password: ''
+  },
+})
+
+/////////////////////////////////////////////////////
+// Queries
+  const {mutateAsync: createAccount , isLoading: isCreatingUser} = useCreateUserAccount()
+  const {mutateAsync: signInAccount, isLoading: isSigningIn } = useSignInAccount()
+
+
+
+
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     // Do something with the form values.
+   
     const newUser = await createAccount(values)
+  
     if(!newUser){
-      return toast({ title: "Sign up failed", })
+      return toast({ title: "Sign up failed. Please try again." })
     }
     
-    // const session = await signInAccount()
+    
+    const session = await signInAccount({
+      email: values.email,
+      password: values.password
+    })
+  
+    if(!session) {
+      toast({ title: "Something went wrong. Please login your new account", });
+      
+      navigate("/sign-in");
+      
+      return;
+    } 
   }
 
+
+
+    const isLoggedIn = await checkAuthUser();
+
+    if (isLoggedIn) {
+      form.reset();
+
+      navigate("/");
+    } else {
+      toast({ title: "Login failed. Please try again.", });
+      
+  //     return;
+  //   }
+  //   } catch (error) {
+  //      console.log({ error });
+  // }
+
+  
+  //////////////////////////////////////////////////////////
 
   return ( 
 
@@ -117,7 +164,7 @@ const SignupForm = () => {
 
         {/*Submit Button */}
         <Button type="submit" className="shad-button_primary" >
-           {isLoading ? (
+           {isCreatingUser || isSigningIn || isUserLoading ? (
             <div className="flex-center gap-2">
                <Loader /> Loading...
             </div>
@@ -135,6 +182,7 @@ const SignupForm = () => {
       </div>
     </Form>
   )
-}
+ } 
 
-export default SignupForm
+
+export default SignupForm      
