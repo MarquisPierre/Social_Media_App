@@ -38,8 +38,8 @@ const form = useForm<z.infer<typeof SignupValidation>>({
 
 /////////////////////////////////////////////////////
 // Queries
-  const {mutateAsync: createAccount , isLoading: isCreatingUser} = useCreateUserAccount()
-  const {mutateAsync: signInAccount, isLoading: isSigningIn } = useSignInAccount()
+  const {mutateAsync: createAccount , isPending: isCreatingAccount} = useCreateUserAccount()
+  const {mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount()
 
 
 
@@ -47,7 +47,7 @@ const form = useForm<z.infer<typeof SignupValidation>>({
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     // Do something with the form values.
-   
+
     const newUser = await createAccount(values)
   
     if(!newUser){
@@ -60,7 +60,7 @@ const form = useForm<z.infer<typeof SignupValidation>>({
       password: values.password
     })
   
-    if(!session) {
+    if(session == null || session == undefined) {
       toast({ title: "Something went wrong. Please login your new account", });
       
       navigate("/sign-in");
@@ -80,11 +80,11 @@ const form = useForm<z.infer<typeof SignupValidation>>({
     } else {
       toast({ title: "Login failed. Please try again.", });
       
-  //     return;
-  //   }
-  //   } catch (error) {
-  //      console.log({ error });
-  // }
+      return;
+    }
+    
+   
+  
 
   
   //////////////////////////////////////////////////////////
@@ -164,7 +164,7 @@ const form = useForm<z.infer<typeof SignupValidation>>({
 
         {/*Submit Button */}
         <Button type="submit" className="shad-button_primary" >
-           {isCreatingUser || isSigningIn || isUserLoading ? (
+           {isCreatingAccount || isSigningIn || isUserLoading ? (
             <div className="flex-center gap-2">
                <Loader /> Loading...
             </div>
@@ -183,6 +183,8 @@ const form = useForm<z.infer<typeof SignupValidation>>({
     </Form>
   )
  } 
+
+ 
 
 
 export default SignupForm      
