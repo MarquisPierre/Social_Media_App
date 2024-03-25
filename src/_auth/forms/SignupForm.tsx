@@ -16,13 +16,15 @@ import { useUserContext } from "@/context/AuthContext";
 
 
 
-const SignupForm = async () => {
+const SignupForm =  () => {
      
   const { toast } = useToast()
   const navigate = useNavigate();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
 
-
+  ///////////////////// Queries
+  const {mutateAsync: createUserAccount , isPending: isCreatingAccount } = useCreateUserAccount()
+  const {mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount()
 
 // The source of the Form Schema which is named SignupValidation -> lib/validation 
 // 1. Define your form.
@@ -30,58 +32,56 @@ const form = useForm<z.infer<typeof SignupValidation>>({
   resolver: zodResolver(SignupValidation),
   defaultValues: {
     name: '',
-    username: "",
+    username: '',
     email: '',
     password: ''
   },
 })
-
-/////////////////////////////////////////////////////
-// Queries
-  const {mutateAsync: createAccount , isPending: isCreatingAccount} = useCreateUserAccount()
-  const {mutateAsync: signInAccount, isPending: isSigningIn } = useSignInAccount()
-
-
-
-
   // 2. Define a submit handler.
   async function onSubmit(values: z.infer<typeof SignupValidation>) {
     // Do something with the form values.
+    try {
+      const newUser = await createUserAccount(values);
 
-    const newUser = await createAccount(values)
-  
-    if(!newUser){
-      return toast({ title: "Sign up failed. Please try again." })
+      if (!newUser) {
+        toast({ title: "Sign up failed. Please try again.", });
+        
+        return;
+      }
+
+      const session = await signInAccount({
+        email: values.email,
+        password: values.password,
+      });
+
+      if (!session) {
+        toast({ title: "Something went wrong. Please login your new account", });
+        
+        navigate("/sign-in");
+        
+        return;
+      }
+
+      const isLoggedIn = await checkAuthUser();
+
+      if (isLoggedIn) {
+        form.reset();
+
+        navigate("/");
+      } else {
+        toast({ title: "Login failed. Please try again.", });
+        
+        return;
+      }
+    } catch (error) {
+      console.log({ error });
     }
-    
-    
-    const session = await signInAccount({
-      email: values.email,
-      password: values.password
-    })
-  
-    if(session == null || session == undefined) {
-      toast({ title: "Something went wrong. Please login your new account", });
-      
-      navigate("/sign-in");
-      
-      return;
-    } 
+ 
   }
 
 
 
-    const isLoggedIn = await checkAuthUser();
-
-    if (isLoggedIn) {
-      form.reset();
-
-      navigate("/");
-    } else {
-      toast({ title: "Login failed. Please try again.", });
-      
-      return;
-    }
+   
     
    
   
@@ -164,11 +164,11 @@ const form = useForm<z.infer<typeof SignupValidation>>({
 
         {/*Submit Button */}
         <Button type="submit" className="shad-button_primary" >
-           {isCreatingAccount || isSigningIn || isUserLoading ? (
+           {isCreatingAccount ? (
             <div className="flex-center gap-2">
                <Loader /> Loading...
             </div>
-           ): "Sign Up"}
+           ): ("Sign Up")}
         </Button>
 
 

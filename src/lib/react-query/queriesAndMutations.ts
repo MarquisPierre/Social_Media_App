@@ -12,9 +12,9 @@ import { INewUser } from '@/types'
 // uses api functions from the appwrite api file
 export const useCreateUserAccount = () => {
     return useMutation({
-        mutationFn: (user: INewUser) => createAccount(user)
-    })
-}
+      mutationFn: (user: INewUser) => createAccount(user),
+    });
+  };
 
 //Sign in into the account by checking for email and password
 // uses api functions from the appwrite api file
