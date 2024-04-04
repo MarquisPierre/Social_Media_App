@@ -18,6 +18,10 @@ const SignupForm = () => {
   const navigate = useNavigate();
   const { checkAuthUser, isLoading: isUserLoading } = useUserContext();
 
+
+
+// The source of the Form Schema which is named SignupValidation -> lib/validation 
+// 1. Define your form.
   const form = useForm<z.infer<typeof SignupValidation>>({
     resolver: zodResolver(SignupValidation),
     defaultValues: {
@@ -28,12 +32,17 @@ const SignupForm = () => {
     },
   });
 
+
+
+
+   /////////////////////////////////////////////////////
   // Queries
   const { mutateAsync: createUserAccount, isPending: isCreatingAccount } = useCreateUserAccount();
   const { mutateAsync: signInAccount, isPending: isSigningInUser } = useSignInAccount();
 
-  // Handler
+// 2. Define a submit handler.
   const handleSignup = async (user: z.infer<typeof SignupValidation>) => {
+     // Do something with the form values.
     try {
       const newUser = await createUserAccount(user);
 
@@ -83,10 +92,12 @@ const SignupForm = () => {
         <p className="text-light-3 small-medium md:base-regular mt-2">
           To use snapgram, Please enter your details
         </p>
+       
+        <form onSubmit={form.handleSubmit(handleSignup)} className="flex flex-col gap-5 w-full mt-4">
 
-        <form
-          onSubmit={form.handleSubmit(handleSignup)}
-          className="flex flex-col gap-5 w-full mt-4">
+
+        {/*component for building controlled form fields. */}
+         {/*Name Form */}
           <FormField
             control={form.control}
             name="name"
@@ -100,7 +111,10 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+ 
 
+
+         {/*Username Form */}
           <FormField
             control={form.control}
             name="username"
@@ -114,7 +128,10 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+         
 
+
+          {/*Email Form */}
           <FormField
             control={form.control}
             name="email"
@@ -128,7 +145,9 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+  
 
+         {/*Password Form */}
           <FormField
             control={form.control}
             name="password"
@@ -142,7 +161,10 @@ const SignupForm = () => {
               </FormItem>
             )}
           />
+     
 
+
+           {/*Submit Button */}
           <Button type="submit" className="shad-button_primary">
             {isCreatingAccount || isSigningInUser || isUserLoading ? (
               <div className="flex-center gap-2">
