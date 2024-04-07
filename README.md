@@ -48,3 +48,9 @@ npm install appwrite
 ```
 
 
+## React-Dropzone
+-Simple React hook to create a HTML5-compliant drag'n'drop zone for files.
+```
+npm install --save react-dropzone
+```
+
