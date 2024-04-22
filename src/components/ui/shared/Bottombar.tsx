@@ -1,5 +1,4 @@
 import { bottombarLinks } from '@/constant'
-import { INavLink } from '@/types'
 import { Link, NavLink, useNavigate, useLocation} from 'react-router-dom'
 
 const Bottombar = () => {
