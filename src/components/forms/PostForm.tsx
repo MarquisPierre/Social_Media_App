@@ -14,33 +14,55 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "../ui/textarea"
 import FileUploader from "../ui/shared/FileUploader"
+import { PostValidation } from "@/lib/validation"
+import { Models } from "appwrite"
+import { toast, useToast } from "../ui/use-toast"
+import { useNavigate } from "react-router-dom"
+import { useCreatePost } from "@/lib/react-query/queriesAndMutations"
+import { useUserContext } from "@/context/AuthContext"
 
+type PostFormProps = {
+  post?: Models.Document;
+  action: "Create" | "Update";
+};
 
+const PostForm = ({ post, action }: PostFormProps) => {
+  const navigate = useNavigate();
+  const { toast } = useToast();
+  const { user } = useUserContext();
 
-const PostForm = ({post}) => {
-
-
-
-    const formSchema = z.object({
-        username: z.string().min(2).max(50),
-      })
-    
+      // Query
+  const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost();
+// const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
       
-    
-    
+
       // 1. Define your form.
-      const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
+      const form = useForm<z.infer<typeof PostValidation>>({
+        resolver: zodResolver(PostValidation),
         defaultValues: {
-          username: "",
+          caption: post ? post?.caption : "",
+          file: [],
+          location: post ? post.location : "",
+          tags: post ? post.tags.join(",") : "",
         },
-      })
+      });
      
       // 2. Define a submit handler.
-      function onSubmit(values: z.infer<typeof formSchema>) {
+      async function onSubmit(values: z.infer<typeof PostValidation>) {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
-        console.log(values)
+         // ACTION = CREATE
+       const newPost = await createPost({
+         ...values,
+         userId: user.id,
+        });
+
+        if (!newPost) {
+           toast({
+           title: `${action} post failed. Please try again.`,
+          });
+        }
+           navigate("/");
       }
   return (
 <Form {...form}>

@@ -4,8 +4,9 @@ import{useQuery,
     QueryClient,
     useInfiniteQuery
 } from '@tanstack/react-query'
-import { createUserAccount, signInAccount, signOutAccount } from '../appwrite/api'
-import { INewUser } from '@/types'
+import { createPost, createUserAccount, signInAccount, signOutAccount } from '../appwrite/api'
+import { INewPost, INewUser } from '@/types'
+import { QUERY_KEYS } from './queryKeys';
 
 
 // Creates the user and saves it into the dabatase
@@ -32,3 +33,16 @@ export const useSignOutAccount = () => {
       mutationFn: () => signOutAccount()
   })
 }
+
+
+export const useCreatePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (post: INewPost) => createPost(post),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+    },
+  });
+};
