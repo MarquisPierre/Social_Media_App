@@ -6,6 +6,7 @@ These are all the external packages that were used for this project
 
 
 
+
 ## Vite for React 
 
 Faster way way to create a React application
@@ -47,4 +48,11 @@ npx shadcn-ui@latest init
 npm install appwrite
 ```
 
+
+## React-Dropzone
+-Simple React hook to create a HTML5-compliant drag'n'drop zone for files.
+- [React-Dropzone Documentation](https://react-dropzone.js.org/)
+```
+npm install --save react-dropzone
+```
 
