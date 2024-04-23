@@ -3,15 +3,20 @@ import { FileWithPath, useDropzone } from "react-dropzone";
 import { Button } from '../button'
 // import { convertFileToUrl } from "@/lib/utils";
 
+
+type FileUploaderProps = {
+  fieldChange: (files: File[]) => void;
+  mediaUrl: string;
+};
+
+
+
 const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   const [file, setFile] = useState<File[]>([]);
   const [fileUrl, setFileUrl] = useState<string>(mediaUrl);
 
 
-  type FileUploaderProps = {
-    fieldChange: (files: File[]) => void;
-    mediaUrl: string;
-  };
+ 
   
 
   const onDrop = useCallback(
@@ -22,6 +27,8 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
     },
     [file]
   );
+
+
   const {getRootProps, getInputProps} = useDropzone({
     onDrop,
     accept: {
@@ -32,6 +39,8 @@ const FileUploader = ({ fieldChange, mediaUrl }: FileUploaderProps) => {
   return (
     <div {...getRootProps()} className="flex flex-center flex-col bg-dark-3 rounded-xl cursor-pointer">
       <input {...getInputProps()} className="cursor-pointer"/>
+
+
       {
         fileUrl ? ( 
           <><div className="flex flex-1 justify-center w-full p-5 lg:p-10">
