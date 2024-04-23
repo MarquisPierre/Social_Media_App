@@ -20,6 +20,7 @@ import { toast, useToast } from "../ui/use-toast"
 import { useNavigate } from "react-router-dom"
 import { useCreatePost } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
+import { Loader } from "lucide-react"
 
 type PostFormProps = {
   post?: Models.Document;
@@ -33,7 +34,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
       // Query
   const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost();
-// const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
+  // const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
       
 
       // 1. Define your form.
@@ -68,7 +69,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
 <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col gap-9 w-full max-w-5xl">
 
-        
+
       <FormField
           control={form.control}
           name="caption"
@@ -151,10 +152,21 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
 
 
-
-        <Button type="button"className="shad-button_dark_4"> Cancel </Button> 
-        <Button type="submit" className="shad-button_primary whitespace-nowrap">Submit</Button>
-        
+      <div className="flex gap-4 items-center justify-end">
+          <Button
+            type="button"
+            className="shad-button_dark_4"
+            onClick={() => navigate(-1)}>
+            Cancel
+          </Button>
+          <Button
+            type="submit"
+            className="shad-button_primary whitespace-nowrap"
+            disabled={isLoadingCreate }>
+            {(isLoadingCreate ) && <Loader />}
+            {action} Post
+          </Button>
+          </div>
       </form>
     </Form>
 

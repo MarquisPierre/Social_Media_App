@@ -122,15 +122,16 @@ export async function createPost(post: INewPost) {
 
     // Get file url
     const fileUrl = getFilePreview(uploadedFile.$id);
+
     if (!fileUrl) {
-      await deleteFile(uploadedFile.$id);
+       deleteFile(uploadedFile.$id);
       throw Error;
     }
 
     // Convert tags into array
-    const tags = post.tags?.replace(/ /g, '').split(",") || [];
+    const tags = post.tags ? post.tags.replace(/ /g, "").split(",") : [];
 
-    // Create post
+    // Save post to database
     const newPost = await databases.createDocument(
       appwriteConfig.databaseId,
       appwriteConfig.postCollectionId,
@@ -139,7 +140,7 @@ export async function createPost(post: INewPost) {
         creator: post.userId,
         caption: post.caption,
         imageUrl: fileUrl,
-        imageId: uploadedFile.$id,
+        imageid: uploadedFile.$id,
         location: post.location,
         tags: tags,
       }
