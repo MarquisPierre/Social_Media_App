@@ -7,6 +7,7 @@ These are all the external packages that were used for this project
 
 
 
+
 ## Vite for React 
 
 Faster way way to create a React application
