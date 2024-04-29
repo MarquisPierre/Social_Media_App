@@ -1,22 +1,29 @@
-import { Models } from "appwrite";
-import { Link } from "react-router-dom";
+// Import necessary modules and components
+import { Models } from "appwrite"; // Importing Models from the appwrite library
+import { Link } from "react-router-dom"; // Importing Link component from react-router-dom
 
-import  PostStats  from "@/components/ui/shared/PostStats";
-import { multiFormatDateString } from "@/lib/utils";
-import { useUserContext } from "@/context/AuthContext";
+import  PostStats  from "@/components/ui/shared/PostStats"; // Importing PostStats component
+import { multiFormatDateString } from "@/lib/utils"; // Importing multiFormatDateString function
+import { useUserContext } from "@/context/AuthContext"; // Importing useUserContext hook from AuthContext
 
+// Define the type for props that the PostCard component receives
 type PostCardProps = {
-  post: Models.Document;
+  post: Models.Document; // The post prop is expected to be of type Document from Models
 };
 
+// Define the PostCard component with its props
 const PostCard = ({ post }: PostCardProps) => {
+  // Destructure user from the AuthContext
   const { user } = useUserContext();
 
+  // Check if post creator exists, if not, return nothing
   if (!post.creator) return;
 
+  // Render the PostCard component
   return (
     <div className="post-card">
       <div className="flex-between">
+        {/* Render profile picture and name of the post creator */}
         <div className="flex items-center gap-3">
           <Link to={`/profile/${post.creator.$id}`}>
             <img
@@ -33,6 +40,7 @@ const PostCard = ({ post }: PostCardProps) => {
             <p className="base-medium lg:body-bold text-light-1">
               {post.creator.name}
             </p>
+            {/* Render post creation date and location */}
             <div className="flex-center gap-2 text-light-3">
               <p className="subtle-semibold lg:small-regular ">
                 {multiFormatDateString(post.$createdAt)}
@@ -45,6 +53,7 @@ const PostCard = ({ post }: PostCardProps) => {
           </div>
         </div>
 
+        {/* Render edit button if user is the creator of the post */}
         <Link
           to={`/update-post/${post.$id}`}
           className={`${user.id !== post.creator.$id && "hidden"}`}>
@@ -57,6 +66,7 @@ const PostCard = ({ post }: PostCardProps) => {
         </Link>
       </div>
 
+      {/* Render post caption, tags, and image */}
       <Link to={`/posts/${post.$id}`}>
         <div className="small-medium lg:base-medium py-5">
           <p>{post.caption}</p>
@@ -76,9 +86,11 @@ const PostCard = ({ post }: PostCardProps) => {
         />
       </Link>
 
+      {/* Render post statistics */}
       <PostStats post={post} userId={user.id} />
     </div>
   );
 };
 
+// Export the PostCard component as default
 export default PostCard;

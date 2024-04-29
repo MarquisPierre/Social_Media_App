@@ -18,7 +18,7 @@ import { PostValidation } from "@/lib/validation"
 import { Models } from "appwrite"
 import { toast, useToast } from "../ui/use-toast"
 import { useNavigate } from "react-router-dom"
-import { useCreatePost } from "@/lib/react-query/queriesAndMutations"
+import { useCreatePost, useUpdatePost } from "@/lib/react-query/queriesAndMutations"
 import { useUserContext } from "@/context/AuthContext"
 import { Loader } from "lucide-react"
 
@@ -34,7 +34,7 @@ const PostForm = ({ post, action }: PostFormProps) => {
 
       // Query
   const { mutateAsync: createPost, isPending: isLoadingCreate } = useCreatePost();
-  // const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
+  const { mutateAsync: updatePost, isPending: isLoadingUpdate } = useUpdatePost();
       
 
       // 1. Define your form.
@@ -53,6 +53,22 @@ const PostForm = ({ post, action }: PostFormProps) => {
         // Do something with the form values.
         // ✅ This will be type-safe and validated.
          // ACTION = CREATE
+         if (post && action === "Update") {
+          const updatedPost = await updatePost({
+            ...values,
+            postId: post.$id,
+            imageId: post.imageId,
+            imageUrl: post.imageUrl,
+          });
+    
+          if (!updatedPost) {
+            toast({
+              title: `${action} post failed. Please try again.`,
+            });
+          }
+          return navigate(`/posts/${post.$id}`);
+        }
+         
        const newPost = await createPost({
          ...values,
          userId: user.id,
@@ -162,9 +178,11 @@ const PostForm = ({ post, action }: PostFormProps) => {
           <Button
             type="submit"
             className="shad-button_primary whitespace-nowrap"
-            disabled={isLoadingCreate }>
-            {(isLoadingCreate ) && <Loader />}
+            disabled={isLoadingCreate || isLoadingUpdate }>
+
+            {(isLoadingCreate || isLoadingUpdate) && <Loader />}
             {action} Post
+            
           </Button>
           </div>
       </form>

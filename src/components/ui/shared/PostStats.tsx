@@ -9,6 +9,7 @@ import {
   useDeleteSavedPost,
   useGetCurrentUser,
 } from "@/lib/react-query/queriesAndMutations"; // Importing custom React query hooks for interacting with the backend
+import { Loader } from "lucide-react";
 
 // Defining the type for props received by the component
 type PostStatsProps = {
@@ -27,8 +28,8 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
   // Custom React query hooks for like, save, and delete actions
   const { mutate: likePost } = useLikePost();
-  const { mutate: savePost } = useSavePost();
-  const { mutate: deleteSavePost } = useDeleteSavedPost();
+  const { mutate: savePost, isPending: isSavingPost } = useSavePost();
+  const { mutate: deleteSavePost, isPending: isDeletingSaved } = useDeleteSavedPost();
 
   // Custom React query hook to get the current user data
   const { data: currentUser } = useGetCurrentUser();
@@ -108,14 +109,14 @@ const PostStats = ({ post, userId }: PostStatsProps) => {
 
       <div className="flex gap-2">
         {/* Save button */}
-        <img
+        {isSavingPost || isDeletingSaved ? <Loader /> : <img
           src={isSaved ? "/assets/icons/saved.svg" : "/assets/icons/save.svg"}
           alt="share"
           width={20}
           height={20}
           className="cursor-pointer"
           onClick={(e) => handleSavePost(e)}
-        />
+        />}
       </div>
     </div>
   );
