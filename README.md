@@ -5,7 +5,6 @@ A social media application that is essentially a clone of instagram that allows 
 These are all the external packages that were used for this project
 
 
-
 ## Vite for React 
 
 Faster way way to create a React application
