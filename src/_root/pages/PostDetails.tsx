@@ -1,39 +1,46 @@
+// Import necessary modules and components from React Router and custom UI components
 import { useParams, Link, useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import Loader from "@/components/ui/shared/Loader";
+import GridPostList from "@/components/ui/shared/GridPostLists";
+import PostStats from "@/components/ui/shared/PostStats";
 
-import  {Button } from "@/components/ui/button";
-import  Loader  from "@/components/ui/shared/Loader";
-import { GridPostList, PostStats } from "@/components/ui/shared";
-
+// Import hooks for data fetching and mutations
 import {
   useGetPostById,
   useGetUserPosts,
-  useDeletePost,
-} from "@/lib/react-query/queries";
+  useDeletePost
+} from "@/lib/react-query/queriesAndMutations";
 import { multiFormatDateString } from "@/lib/utils";
 import { useUserContext } from "@/context/AuthContext";
 
+// Component to display post details
 const PostDetails = () => {
-  const navigate = useNavigate();
-  const { id } = useParams();
-  const { user } = useUserContext();
+  const navigate = useNavigate(); // Hook for navigation
+  const { id } = useParams(); // Extract post ID from the URL parameters
+  const { user } = useUserContext(); // Get the current user context
 
+  // Fetch the post details by ID
   const { data: post, isLoading } = useGetPostById(id);
-  const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(
-    post?.creator.$id
-  );
+  // Fetch the posts by the same user
+  const { data: userPosts, isLoading: isUserPostLoading } = useGetUserPosts(post?.creator.$id);
+  // Mutation to delete the post
   const { mutate: deletePost } = useDeletePost();
 
+  // Filter out the current post from the list of user's posts
   const relatedPosts = userPosts?.documents.filter(
     (userPost) => userPost.$id !== id
   );
 
+  // Handle post deletion
   const handleDeletePost = () => {
     deletePost({ postId: id, imageId: post?.imageId });
-    navigate(-1);
+    navigate(-1); // Navigate back to the previous page
   };
 
   return (
     <div className="post_details-container">
+      {/* Back button for navigation */}
       <div className="hidden md:flex max-w-5xl w-full">
         <Button
           onClick={() => navigate(-1)}
@@ -49,6 +56,7 @@ const PostDetails = () => {
         </Button>
       </div>
 
+      {/* Show loader while the post is loading */}
       {isLoading || !post ? (
         <Loader />
       ) : (
@@ -61,6 +69,7 @@ const PostDetails = () => {
 
           <div className="post_details-info">
             <div className="flex-between w-full">
+              {/* Link to the creator's profile */}
               <Link
                 to={`/profile/${post?.creator.$id}`}
                 className="flex items-center gap-3">
@@ -89,6 +98,7 @@ const PostDetails = () => {
               </Link>
 
               <div className="flex-center gap-4">
+                {/* Link to update the post, visible only to the creator */}
                 <Link
                   to={`/update-post/${post?.$id}`}
                   className={`${user.id !== post?.creator.$id && "hidden"}`}>
@@ -100,10 +110,11 @@ const PostDetails = () => {
                   />
                 </Link>
 
+                {/* Button to delete the post, visible only to the creator */}
                 <Button
                   onClick={handleDeletePost}
                   variant="ghost"
-                  className={`ost_details-delete_btn ${
+                  className={`post_details-delete_btn ${
                     user.id !== post?.creator.$id && "hidden"
                   }`}>
                   <img
@@ -118,6 +129,7 @@ const PostDetails = () => {
 
             <hr className="border w-full border-dark-4/80" />
 
+            {/* Post caption and tags */}
             <div className="flex flex-col flex-1 w-full small-medium lg:base-regular">
               <p>{post?.caption}</p>
               <ul className="flex gap-1 mt-2">
@@ -131,6 +143,7 @@ const PostDetails = () => {
               </ul>
             </div>
 
+            {/* Post statistics */}
             <div className="w-full">
               <PostStats post={post} userId={user.id} />
             </div>
@@ -144,6 +157,7 @@ const PostDetails = () => {
         <h3 className="body-bold md:h3-bold w-full my-10">
           More Related Posts
         </h3>
+        {/* Show loader while related posts are loading */}
         {isUserPostLoading || !relatedPosts ? (
           <Loader />
         ) : (
