@@ -3,7 +3,7 @@ import { Models } from "appwrite";
 import { Link } from "react-router-dom"; 
 import PostStats from "@/components/ui/shared/PostStats"; 
 import { useUserContext } from "@/context/AuthContext"; 
-
+ 
 // Define the props type for GridPostList component
 type GridPostListProps = {
   posts: Models.Document[]; // Array of post documents
