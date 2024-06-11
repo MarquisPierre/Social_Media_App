@@ -5,7 +5,6 @@ import SigninForm from "./_auth/forms/SigninForm";
 import RootLayout from "./_root/RootLayout";
 import { Toaster } from "@/components/ui/toaster"
 import { 
-  AllUsers,
   CreatePost, 
   EditPost,
   Explore,
