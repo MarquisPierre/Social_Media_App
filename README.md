@@ -54,3 +54,10 @@ npm install appwrite
 npm install --save react-dropzone
 ```
 
+
+## React-intersection-observer
+-React implementation of the Intersection Observer API to tell you when an element enters or leaves the viewport.
+- [React-intersection-observer Documentation](https://www.npmjs.com/package/react-intersection-observer)
+```
+npm i react-intersection-observer
+```
