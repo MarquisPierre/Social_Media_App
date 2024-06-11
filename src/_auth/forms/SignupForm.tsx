@@ -84,7 +84,8 @@ const SignupForm = () => {
   return (
     <Form {...form}>
       <div className="sm:w-420 flex-center flex-col">
-        <img src="/assets/images/logo.svg" alt="logo" />
+      <h3 className='h1-bold md:2-bold text-center w-full' >📷 InstaBlam</h3>
+
 
         <h2 className="h3-bold md:h2-bold pt-5 sm:pt-12">
           Create a new account
