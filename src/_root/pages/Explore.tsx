@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import { useInView } from "react-intersection-observer";
 
-import { Input } from "@/components/ui/input";
+import {Input}  from "@/components/ui/input";
 import useDebounce from "@/hooks/useDebounce";
 import GridPostList from "@/components/ui/shared/GridPostLists";
-import Loader from "@/components/ui/shared/Loader";
+import Loader from "@/components/ui/shared/Loader"
 import { useGetPosts, useSearchPosts } from "@/lib/react-query/queriesAndMutations";
 
 export type SearchResultProps = {
@@ -36,7 +36,7 @@ const Explore = () => {
     if (inView && !searchValue) {
       fetchNextPage();
     }
-  }, [inView, searchValue, fetchNextPage]);
+  }, [inView, searchValue]);
 
   if (!posts)
     return (
@@ -46,7 +46,8 @@ const Explore = () => {
     );
 
   const shouldShowSearchResults = searchValue !== "";
-  const shouldShowPosts = !shouldShowSearchResults && posts.pages.every((item) => item && item.documents.length === 0);
+  const shouldShowPosts = !shouldShowSearchResults && 
+    posts.pages.every((item) => item.documents.length === 0);
 
   return (
     <div className="explore-container">
@@ -95,11 +96,9 @@ const Explore = () => {
         ) : shouldShowPosts ? (
           <p className="text-light-4 mt-10 text-center w-full">End of posts</p>
         ) : (
-          posts.pages.map((item, index) =>
-            item ? (
-              <GridPostList key={`page-${index}`} posts={item.documents} />
-            ) : null
-          )
+          posts.pages.map((item, index) => (
+            <GridPostList key={`page-${index}`} posts={item.documents} />
+          ))
         )}
       </div>
 
